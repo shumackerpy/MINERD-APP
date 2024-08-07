@@ -1,0 +1,20 @@
+.image-container {
+    display: flex;
+    flex-direction: column; /* Alinea las imágenes verticalmente */
+    gap: 15px;
+    align-items: center; /* Centra las imágenes horizontalmente */
+  }
+  
+  .image-container img {
+    width: 150px; /* Tamaño por defecto para las imágenes */
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .image-container .small-image {
+    width: 75px; /* Tamaño reducido para la segunda imagen */
+    height: 75px;
+  }
+  

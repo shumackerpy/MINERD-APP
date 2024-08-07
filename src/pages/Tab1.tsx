@@ -1,25 +1,56 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Tab1.css';
+import React, { useState } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonAlert } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
+import { Storage } from '@capacitor/storage';
 
-const Tab1: React.FC = () => {
+const Home: React.FC = () => {
+  const history = useHistory();
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+
+  const clearStorage = async () => {
+    await Storage.clear();
+    setShowAlert(false);
+  };
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
+          <IonTitle>MINERD App</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
+      <IonContent className="ion-padding">
+      <IonButton expand="block" onClick={() => history.push('/tab5')}>
+          Nueva Incidencia
+        </IonButton>
+        <IonButton expand="block" onClick={() => history.push('/tab2')}>
+          Registro de Incidencias
+        </IonButton>
+        <IonButton expand="block" onClick={() => history.push('/tab4')}>
+          Acerca de
+        </IonButton>
+        <IonButton expand="block" color="danger" onClick={() => setShowAlert(true)}>
+          Borrar Todos los Registros
+        </IonButton>
+        <IonAlert
+          isOpen={showAlert}
+          onDidDismiss={() => setShowAlert(false)}
+          header={'Confirmar'}
+          message={'¿Estás seguro de que deseas borrar todos los registros?'}
+          buttons={[
+            {
+              text: 'Cancelar',
+              role: 'cancel'
+            },
+            {
+              text: 'Borrar',
+              handler: clearStorage
+            }
+          ]}
+        />
       </IonContent>
     </IonPage>
   );
 };
 
-export default Tab1;
+export default Home;

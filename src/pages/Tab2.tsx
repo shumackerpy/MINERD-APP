@@ -1,25 +1,53 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Tab2.css';
+import React, { useState, useEffect } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel } from '@ionic/react';
+import { useHistory, useLocation } from 'react-router-dom';
+import { Storage } from '@capacitor/storage';
 
-const Tab2: React.FC = () => {
+interface Incident {
+  title: string;
+  school: string;
+  region: string;
+  district: string;
+  date: string;
+  description: string;
+  photo: string | null;
+  audio: string | null;
+}
+
+const Incidents: React.FC = () => {
+  const [incidents, setIncidents] = useState<Incident[]>([]);
+  const history = useHistory();
+  const location = useLocation();
+
+  useEffect(() => {
+    const loadIncidents = async () => {
+      const { value } = await Storage.get({ key: 'incidents' });
+      if (value) {
+        setIncidents(JSON.parse(value));
+      }
+    };
+
+    loadIncidents();
+  }, [location.search]);  // Dependencia de query string
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 2</IonTitle>
+          <IonTitle>Incidencias</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 2</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 2 page" />
+      <IonContent>
+        <IonList>
+          {incidents.map((incident, index) => (
+            <IonItem key={index} onClick={() => history.push(`/incidents/${index}`)}>
+              <IonLabel>{incident.title}</IonLabel>
+            </IonItem>
+          ))}
+        </IonList>
       </IonContent>
     </IonPage>
   );
 };
 
-export default Tab2;
+export default Incidents;
